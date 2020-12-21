@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @QueryEntity
-@Document("offer")
+@Document
 public class Offer {
     public enum OfferType {
         SIMPLE, COMPLEX

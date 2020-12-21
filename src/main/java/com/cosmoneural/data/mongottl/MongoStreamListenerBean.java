@@ -12,6 +12,7 @@ import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.stereotype.Component;
 
@@ -30,16 +31,15 @@ public class MongoStreamListenerBean implements InitializingBean {
     @Resource
     MongoDatabaseFactory mongoDatabaseFactory;
 
+    @Value("${com.tatadigital.product.mongo.dbname}")
+    String dbName;
+
     @Override
     public void afterPropertiesSet() throws Exception {
 
         Runnable run = () -> {   // lambda expression
-            System.out.println("constructor");
-            MongoDatabase db = mongoDatabaseFactory.getMongoDatabase("sample");
-            System.out.println("got DB");
-            MongoCollection<Document> collection = db.getCollection("offer");
-            System.out.println("got collection");
-            System.out.println(collection.listIndexes());
+            MongoDatabase db = mongoDatabaseFactory.getMongoDatabase(dbName);
+            MongoCollection<Document> collection = db.getCollection(Offer.class.getSimpleName().toLowerCase());
             if(!collection.listIndexes().iterator().hasNext())
             {
                 System.out.println("Creating Index");
